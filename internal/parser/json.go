@@ -400,9 +400,13 @@ func (p *Parser) parseToolUseBlock(data map[string]any) (shared.ContentBlock, er
 }
 
 func (p *Parser) parseServerToolUseBlock(data map[string]any) (shared.ContentBlock, error) {
+	// Try tool_use_id first (standard format), then id (Z.AI format)
 	id, ok := data["tool_use_id"].(string)
 	if !ok {
-		return nil, shared.NewMessageParseError("server_tool_use block missing tool_use_id field", data)
+		id, ok = data["id"].(string)
+		if !ok {
+			return nil, shared.NewMessageParseError("server_tool_use block missing tool_use_id or id field", data)
+		}
 	}
 	name, ok := data["name"].(string)
 	if !ok {
