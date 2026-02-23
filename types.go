@@ -40,6 +40,9 @@ type ToolUseBlock = shared.ToolUseBlock
 // ToolResultBlock represents a tool result content block.
 type ToolResultBlock = shared.ToolResultBlock
 
+// ServerToolUseBlock represents a server tool use request (MCP tools, Z.ai built-in tools).
+type ServerToolUseBlock = shared.ServerToolUseBlock
+
 // StreamMessage represents a message in the streaming protocol.
 type StreamMessage = shared.StreamMessage
 
@@ -72,10 +75,11 @@ const (
 
 // Re-export content block type constants
 const (
-	ContentBlockTypeText       = shared.ContentBlockTypeText
-	ContentBlockTypeThinking   = shared.ContentBlockTypeThinking
-	ContentBlockTypeToolUse    = shared.ContentBlockTypeToolUse
-	ContentBlockTypeToolResult = shared.ContentBlockTypeToolResult
+	ContentBlockTypeText          = shared.ContentBlockTypeText
+	ContentBlockTypeThinking      = shared.ContentBlockTypeThinking
+	ContentBlockTypeToolUse       = shared.ContentBlockTypeToolUse
+	ContentBlockTypeToolResult    = shared.ContentBlockTypeToolResult
+	ContentBlockTypeServerToolUse = shared.ContentBlockTypeServerToolUse
 )
 
 // Re-export stream event type constants for Event["type"] discrimination.

@@ -21,10 +21,11 @@ const (
 
 // Content block type constants
 const (
-	ContentBlockTypeText       = "text"
-	ContentBlockTypeThinking   = "thinking"
-	ContentBlockTypeToolUse    = "tool_use"
-	ContentBlockTypeToolResult = "tool_result"
+	ContentBlockTypeText          = "text"
+	ContentBlockTypeThinking      = "thinking"
+	ContentBlockTypeToolUse       = "tool_use"
+	ContentBlockTypeToolResult    = "tool_result"
+	ContentBlockTypeServerToolUse = "server_tool_use" // Z.ai and other MCP server tools
 )
 
 // AssistantMessageError represents error types in assistant messages.
@@ -250,6 +251,20 @@ type ToolResultBlock struct {
 // BlockType returns the content block type for ToolResultBlock.
 func (b *ToolResultBlock) BlockType() string {
 	return ContentBlockTypeToolResult
+}
+
+// ServerToolUseBlock represents a server tool use request (e.g., MCP tools, Z.ai built-in tools).
+// This is similar to ToolUseBlock but for tools provided by external servers.
+type ServerToolUseBlock struct {
+	MessageType string         `json:"type"`
+	ToolUseID   string         `json:"tool_use_id"`
+	Name        string         `json:"name"`
+	Input       map[string]any `json:"input"`
+}
+
+// BlockType returns the content block type for ServerToolUseBlock.
+func (b *ServerToolUseBlock) BlockType() string {
+	return ContentBlockTypeServerToolUse
 }
 
 // RawControlMessage wraps raw control protocol messages for passthrough to the control handler.

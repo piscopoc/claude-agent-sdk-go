@@ -349,6 +349,8 @@ func (p *Parser) parseContentBlock(blockData any) (shared.ContentBlock, error) {
 		return p.parseToolUseBlock(data)
 	case shared.ContentBlockTypeToolResult:
 		return p.parseToolResultBlock(data)
+	case shared.ContentBlockTypeServerToolUse:
+		return p.parseServerToolUseBlock(data)
 	default:
 		return nil, shared.NewMessageParseError(
 			fmt.Sprintf("unknown content block type: %s", blockType),
@@ -391,6 +393,26 @@ func (p *Parser) parseToolUseBlock(data map[string]any) (shared.ContentBlock, er
 		input = make(map[string]any)
 	}
 	return &shared.ToolUseBlock{
+		ToolUseID: id,
+		Name:      name,
+		Input:     input,
+	}, nil
+}
+
+func (p *Parser) parseServerToolUseBlock(data map[string]any) (shared.ContentBlock, error) {
+	id, ok := data["tool_use_id"].(string)
+	if !ok {
+		return nil, shared.NewMessageParseError("server_tool_use block missing tool_use_id field", data)
+	}
+	name, ok := data["name"].(string)
+	if !ok {
+		return nil, shared.NewMessageParseError("server_tool_use block missing name field", data)
+	}
+	input, _ := data["input"].(map[string]any) // Optional field
+	if input == nil {
+		input = make(map[string]any)
+	}
+	return &shared.ServerToolUseBlock{
 		ToolUseID: id,
 		Name:      name,
 		Input:     input,
