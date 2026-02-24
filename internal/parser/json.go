@@ -400,9 +400,10 @@ func (p *Parser) parseToolUseBlock(data map[string]any) (shared.ContentBlock, er
 }
 
 func (p *Parser) parseServerToolUseBlock(data map[string]any) (shared.ContentBlock, error) {
+	// Some server tools use "id", some use "tool_use_id", and some may omit it
 	id, ok := data["tool_use_id"].(string)
 	if !ok {
-		return nil, shared.NewMessageParseError("server_tool_use block missing tool_use_id field", data)
+		id, _ = data["id"].(string)
 	}
 	name, ok := data["name"].(string)
 	if !ok {
